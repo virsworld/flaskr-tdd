@@ -29,17 +29,22 @@ SECRET_KEY = "change_me"
 SQLALCHEMY_DATABASE_URI = f"sqlite:///{Path(basedir).joinpath(DATABASE)}"
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+# create and initialize a new Flask app
+app = Flask(__name__)
+# load the config
+app.config.from_object(__name__)
+
 url = os.getenv("DATABASE_URL", f"sqlite:///{Path(basedir).joinpath(DATABASE)}")
 
 if url.startswith("postgres://"):
     url = url.replace("postgres://", "postgresql://", 1)
 
-SQLALCHEMY_DATABASE_URI = url
+# Enforce SSL mode for psycopg2 if on Render
+if "postgresql" in url and "sslmode" not in url:
+    url += "?sslmode=require"
 
-# create and initialize a new Flask app
-app = Flask(__name__)
-# load the config
-app.config.from_object(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = url
+
 # init sqlalchemy
 db = SQLAlchemy(app)
 
