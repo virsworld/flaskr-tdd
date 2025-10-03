@@ -43,7 +43,11 @@ app.config.from_object(__name__)
 # init sqlalchemy
 db = SQLAlchemy(app)
 
+
 from project import models
+
+with app.app_context():
+    db.create_all()
 
 
 @app.route("/")
