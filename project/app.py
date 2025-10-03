@@ -46,7 +46,7 @@ if "postgresql" in url and "sslmode" not in url:
 app.config["SQLALCHEMY_DATABASE_URI"] = url
 
 # init sqlalchemy
-db = SQLAlchemy(app, engine_options={"pool_pre_ping", True})
+db = SQLAlchemy(app, engine_options={"pool_pre_ping": True})
 
 
 from project import models
