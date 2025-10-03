@@ -41,12 +41,12 @@ if url.startswith("postgres://"):
 
 # Enforce SSL mode for psycopg2 if on Render
 if "postgresql" in url and "sslmode" not in url:
-    url += "?sslmode=require"
+    url += "?sslmode=prefer"
 
 app.config["SQLALCHEMY_DATABASE_URI"] = url
 
 # init sqlalchemy
-db = SQLAlchemy(app)
+db = SQLAlchemy(app, engine_options={"pool_pre_ping", True})
 
 
 from project import models
